@@ -1,3 +1,6 @@
+import Box from "../box";
+import FileUpload from "../file/fileupload";
+
 const MainLayout = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-12">
@@ -7,11 +10,17 @@ const MainLayout = () => {
           <p>네트워크 분석</p>
         </header>
 
-        <section></section>
+        <section>
+          <FileUpload onFileSelect={() => {}} />
+        </section>
 
-        <section></section>
+        <section>
+          <Box />
+        </section>
 
-        <section></section>
+        <section>
+          <Box />
+        </section>
       </div>
     </div>
   );
