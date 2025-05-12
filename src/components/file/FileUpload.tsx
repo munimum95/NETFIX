@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import { Upload } from "lucide-react";
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
@@ -23,9 +24,12 @@ const FileUpload = ({ onFileSelect }: FileUploadProps) => {
   return (
     <div
       {...getRootProps()}
-      className="border-2 border-dashed border-gray-300 p-8 rounded-xl text-center cursor-pointer bg-white hover:bg-gray-50 transition"
+      className="border-2 border-dashed border-main p-8 rounded-xl text-center cursor-pointer bg-white hover:bg-orange-50 transition"
     >
       <input {...getInputProps()} />
+      <div className="flex items-center justify-center">
+        <Upload className="w-10 h-10 text-main" />
+      </div>
       {isDragActive ? <p>파일을 놓아주세요.</p> : <p>HAR 파일을 업로드하거나 드래그하세요</p>}
     </div>
   );
