@@ -4,7 +4,7 @@ interface StatsBoxProps {
   loadTime: string;
 }
 
-const StatsBox = ({ totalRequests, totalSize, loadTime }: StatsBoxProps) => {
+const HarStatsBox = ({ totalRequests, totalSize, loadTime }: StatsBoxProps) => {
   return (
     <div className="flex gap-4">
       <div className="flex-1 bg-white rounded-lg border p-6 text-center">
@@ -23,4 +23,4 @@ const StatsBox = ({ totalRequests, totalSize, loadTime }: StatsBoxProps) => {
   );
 };
 
-export default StatsBox;
+export default HarStatsBox;
