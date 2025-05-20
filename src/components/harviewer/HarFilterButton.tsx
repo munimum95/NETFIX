@@ -6,7 +6,7 @@ interface FilterButtonProps {
 
 const HarFilterButton = ({ options, value, onChange }: FilterButtonProps) => {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 mb-4">
       {options.map((option) => (
         <button
           key={option}
