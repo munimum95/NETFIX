@@ -22,16 +22,18 @@ const FileUpload = ({ onFileSelect }: FileUploadProps) => {
     multiple: false,
   });
   return (
-    <div
-      {...getRootProps()}
-      className="border-2 border-dashed border-main p-8 rounded-xl text-center cursor-pointer bg-white hover:bg-orange-50 transition"
-    >
-      <input {...getInputProps()} />
-      <div className="flex items-center justify-center">
-        <Upload className="w-10 h-10 text-main" />
+    <section className="border-2 space-y-4 border-main-light p-8 rounded-xl">
+      <div
+        {...getRootProps()}
+        className="border-2 border-dashed border-main p-8 rounded-xl text-center cursor-pointer bg-white hover:bg-orange-50 transition"
+      >
+        <input {...getInputProps()} />
+        <div className="flex items-center justify-center">
+          <Upload className="w-10 h-10 text-main" />
+        </div>
+        {isDragActive ? <p>파일을 놓아주세요.</p> : <p>HAR 파일을 업로드하거나 드래그하세요</p>}
       </div>
-      {isDragActive ? <p>파일을 놓아주세요.</p> : <p>HAR 파일을 업로드하거나 드래그하세요</p>}
-    </div>
+    </section>
   );
 };
 export default FileUpload;
