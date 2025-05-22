@@ -1,4 +1,4 @@
-import { HarEntry } from "@/types/har";
+import { FilterType, HarEntry, ParsedHarEntry } from "@/types/har";
 
 export const parseHarFile = async (file: File) => {
   if (!file) {
@@ -25,4 +25,31 @@ export const parseHarFile = async (file: File) => {
       timings: entry.timings,
     };
   });
+};
+
+export const getFilterType = (entry: ParsedHarEntry): FilterType => {
+  if (entry.status >= 400) {
+    return "Errors";
+  }
+  if (
+    entry.url.includes("xhr") ||
+    entry.url.includes("fetch") ||
+    entry.type.includes("json") ||
+    entry.type.includes("xml")
+  ) {
+    return "XHR";
+  }
+  if (entry.type.includes("javascript")) {
+    return "JS";
+  }
+  if (entry.type.includes("css")) {
+    return "CSS";
+  }
+  if (entry.type.includes("image")) {
+    return "Img";
+  }
+  if (entry.type.includes("audio") || entry.type.includes("video")) {
+    return "Media";
+  }
+  return "Other";
 };
