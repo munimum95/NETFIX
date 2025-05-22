@@ -32,14 +32,13 @@ export interface HarData {
   };
 }
 export interface ParsedHarEntry {
-  responseSize: number;
   url: string;
   status: number;
   type: string;
   size: number;
   time: number;
   method: string;
-  startedDateTime: string;
+  startedDateTime?: string;
   timings: {
     wait: number;
     receive: number;
