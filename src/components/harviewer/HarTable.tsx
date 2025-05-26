@@ -3,7 +3,7 @@ import HarFilterButton from "./HarFilterButton";
 import HarStatsBox from "@/components/harviewer/HarStatsBox";
 import { useMemo, useState } from "react";
 import { formatBytes } from "@/utils/formatNumber";
-import { getFilterType } from "@/utils/harFileUtils";
+import { getColorForTime, getFilterType } from "@/utils/harFileUtils";
 
 const FILTERS = ["All", "XHR", "JS", "CSS", "Img", "Media", "Other", "Errors"];
 
@@ -40,11 +40,7 @@ const HarTable = ({ entries }: HarTableProps) => {
                 <td className="p-2 text-gray-600">{e.type}</td>
                 <td className="p-2">{e.size > 0 ? formatBytes(e.size) : "-"}</td>
 
-                <td
-                  className={`p-2 font-medium ${e.time >= 200 && e.time < 400 ? "text-orange-600" : "text-green-600"}`}
-                >
-                  {e.time}ms
-                </td>
+                <td className={`p-2 font-medium ${getColorForTime(e.time)}`}>{e.time}ms</td>
               </tr>
             ))}
           </tbody>

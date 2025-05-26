@@ -53,3 +53,16 @@ export const getFilterType = (entry: ParsedHarEntry): FilterType => {
   }
   return "Other";
 };
+
+export const getColorForTime = (time: number): string => {
+  if (time <= 200) {
+    return "text-green-500";
+  }
+  if (time <= 400) {
+    return "text-orange-500";
+  }
+  if (time <= 500) {
+    return "text-red-500";
+  }
+  return "text-red-700";
+};
