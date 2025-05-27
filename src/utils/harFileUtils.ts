@@ -66,3 +66,66 @@ export const getColorForTime = (time: number): string => {
   }
   return "text-red-700";
 };
+
+export const getStatusColor = (status: number) => {
+  if (status >= 500) return "bg-red-100 text-red-600";
+  if (status >= 400) return "bg-yellow-100 text-yellow-600";
+  if (status >= 300) return "bg-blue-100 text-blue-600";
+  return "bg-green-100 text-green-600";
+};
+
+export const getMethodColor = (method: string) => {
+  switch (method) {
+    case "GET":
+      return "bg-blue-100 text-blue-700";
+    case "POST":
+      return "bg-green-100 text-green-700";
+    case "PUT":
+    case "PATCH":
+      return "bg-yellow-100 text-yellow-700";
+    case "DELETE":
+      return "bg-red-100 text-red-700";
+    default:
+      return "bg-gray-100 text-gray-700";
+  }
+};
+/**
+ Lighthouse 기준 네트워크 분석
+ 1.ttfb 200ms
+ 2.느린응답 2000ms
+ 3.용량 큰 js파일 1Mb
+ 4.용량 큰 이미지파일 100Kb
+ 5.
+ */
+export const analyzeHarEntrie = (entries: ParsedHarEntry[]) => {
+  const ttfbLimit = 200; // ms
+  const slowLimit = 2000; // ms
+  const largeJS = 1024 * 1024; // 1MB
+  const largeImg = 100 * 1024; // 100KB
+
+  const ttfbIssues = entries.filter((e) => e.timings?.wait > ttfbLimit);
+  const slowIssues = entries.filter((e) => e.time > slowLimit);
+  const largeJsFileIssues = entries.filter(
+    (e) => (e.type?.includes("javascript") || e.url.endsWith(".js")) && (e.size || 0) > largeJS
+  );
+  const largeImageIssues = entries.filter((e) => e.type?.startsWith("image/") && (e.size || 0) > largeImg);
+
+  return {
+    ttfbIssues: {
+      count: ttfbIssues.length,
+      topExamples: ttfbIssues.slice(0, 5),
+    },
+    slowIssues: {
+      count: slowIssues.length,
+      topExamples: slowIssues.slice(0, 5),
+    },
+    largeJsFileIssues: {
+      count: largeJsFileIssues.length,
+      topExamples: largeJsFileIssues.slice(0, 5),
+    },
+    largeImageIssues: {
+      count: largeImageIssues.length,
+      topExamples: largeImageIssues.slice(0, 5),
+    },
+  };
+};
