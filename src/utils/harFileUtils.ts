@@ -1,4 +1,4 @@
-import { FilterType, HarEntry, ParsedHarEntry } from "@/types/har";
+import { AnalyzedHarEntry, FilterType, HarEntry, ParsedHarEntry } from "@/types/har";
 
 export const parseHarFile = async (file: File) => {
   if (!file) {
@@ -91,41 +91,49 @@ export const getMethodColor = (method: string) => {
 };
 /**
  Lighthouse 기준 네트워크 분석
- 1.ttfb 200ms
+ 1.ttfb 600ms
  2.느린응답 2000ms
  3.용량 큰 js파일 1Mb
  4.용량 큰 이미지파일 100Kb
- 5.
+ 5.중복 요청 추적
+ 6.전체 응답 용량 계산 
+ 7.렌더링 차단 리소스
+ 8.캐시 비적용 리소스
  */
-export const analyzeHarEntrie = (entries: ParsedHarEntry[]) => {
-  const ttfbLimit = 200; // ms
+
+export const analyzeHarEntries = (entries: AnalyzedHarEntry[]) => {
+  const ttfbLimit = 600; // ms
   const slowLimit = 2000; // ms
   const largeJS = 1024 * 1024; // 1MB
   const largeImg = 100 * 1024; // 100KB
 
-  const ttfbIssues = entries.filter((e) => e.timings?.wait > ttfbLimit);
-  const slowIssues = entries.filter((e) => e.time > slowLimit);
-  const largeJsFileIssues = entries.filter(
-    (e) => (e.type?.includes("javascript") || e.url.endsWith(".js")) && (e.size || 0) > largeJS
-  );
-  const largeImageIssues = entries.filter((e) => e.type?.startsWith("image/") && (e.size || 0) > largeImg);
+  const ttfb = entries
+    .filter((e) => e.timings?.wait && e.timings.wait > ttfbLimit)
+    .sort((a, b) => (b.timings?.wait ?? 0) - (a.timings?.wait ?? 0));
+  const slow = entries.filter((e) => e.time > slowLimit).sort((a, b) => b.time - a.time);
+  const largeJsFiles = entries
+    .filter((e) => (e.type?.includes("javascript") || e.url.endsWith(".js")) && e.size > largeJS)
+    .sort((a, b) => b.size - a.size);
+  const largeImages = entries
+    .filter((e) => e.type?.startsWith("image/") && e.size > largeImg)
+    .sort((a, b) => b.size - a.size);
 
   return {
-    ttfbIssues: {
-      count: ttfbIssues.length,
-      topExamples: ttfbIssues.slice(0, 5),
+    ttfb: {
+      count: ttfb.length,
+      topExamples: ttfb.slice(0, 5),
     },
-    slowIssues: {
-      count: slowIssues.length,
-      topExamples: slowIssues.slice(0, 5),
+    slow: {
+      count: slow.length,
+      topExamples: slow.slice(0, 5),
     },
-    largeJsFileIssues: {
-      count: largeJsFileIssues.length,
-      topExamples: largeJsFileIssues.slice(0, 5),
+    largeJsFiles: {
+      count: largeJsFiles.length,
+      topExamples: largeJsFiles.slice(0, 5),
     },
-    largeImageIssues: {
-      count: largeImageIssues.length,
-      topExamples: largeImageIssues.slice(0, 5),
+    largeImages: {
+      count: largeImages.length,
+      topExamples: largeImages.slice(0, 5),
     },
   };
 };
